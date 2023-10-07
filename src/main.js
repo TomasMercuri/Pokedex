@@ -90,3 +90,63 @@ function agregarImagenes(){
 }
 
 
+/*********************************/
+/*       BUSCADOR POKEMONES      */
+/*********************************/
+function mostrarError(){
+    document.querySelector('#buscador-pokemon').style.border = '1px solid red';
+}
+
+function ocultarError(){
+    document.querySelector('#buscador-pokemon').style.border = '';
+}
+
+function ocultarNavegacionModal(){
+    document.querySelector('#anterior-pokemon').className = 'visually-hidden';
+    document.querySelector('#siguiente-pokemon').className = 'visually-hidden';
+}
+
+
+function mostrarOpcionesBuscador(){
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
+        .then(respuesta => respuesta.json())
+        .then(respuesta => {
+            respuesta.results.forEach(pokemon => {
+                const $opcionPokemon = document.createElement('option');
+                $opcionPokemon.value = retornarId(pokemon.url);
+                $opcionPokemon.textContent = pokemon.name.toUpperCase();
+                document.querySelector('#opciones-pokemones').appendChild($opcionPokemon);
+            });
+        })
+        .catch(error => console.error('FALLO', error));
+}
+
+function retornarPokemonesExistentes(){
+    let numeroPokemonesExistentes = [];
+
+    document.querySelectorAll('#opciones-pokemones option').forEach(opcionPokemon => {
+        numeroPokemonesExistentes.push(opcionPokemon.value);
+    });
+
+    return numeroPokemonesExistentes;
+}
+
+document.querySelector('#boton-buscar-pokemon').addEventListener('click', () => {
+    const numeroPokemon = document.querySelector('#buscador-pokemon').value;
+    const numeroPokemonesExistentes = retornarPokemonesExistentes();
+
+    if(numeroPokemonesExistentes.includes(numeroPokemon)){
+        ocultarError();
+        eliminarModalAnterior();
+        ocultarFondo();
+        crearModal();
+        mostrarInformacionPokemon(numeroPokemon);
+        permitirCerrarModal();
+        ocultarNavegacionModal();
+    }else{
+        mostrarError();
+    }
+});
+
+
+
