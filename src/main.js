@@ -386,3 +386,11 @@ document.querySelector('#ultima-pagina').addEventListener('click', () => {
     }
 });
 
+
+// INICIAR
+function iniciar(){
+    actualizarPagina();
+    mostrarOpcionesBuscador();
+}
+
+iniciar();
