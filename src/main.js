@@ -308,3 +308,81 @@ function retornarIndiceActual(cartasPokemon, numeroPokemonActual){
 
 
 
+/****************************/
+//       PAGINACION         //
+/****************************/
+function cambiarTextoPaginacion(){
+    document.querySelector('#pagina-actual').textContent = numeroPaginaActual;
+}
+
+function manejarPaginacion(){
+    eliminarModalAnterior();
+    actualizarPagina();
+    cambiarTextoPaginacion();
+    mostrarFondo();
+}
+
+document.querySelector('#primer-pagina').addEventListener('click', () => {
+    if(numeroPaginaActual > 1){
+        numeroPaginaActual = 1;
+        cantidadPokemonesMostrados = 0;
+        manejarPaginacion();
+    }
+}); 
+
+document.querySelector('#pagina-anterior').addEventListener('click', () => {
+    if(numeroPaginaActual > 1){
+        numeroPaginaActual--;
+        cantidadPokemonesMostrados -= POKEMONES_POR_PAGINA;
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#menos-diez').addEventListener('click', () => {
+    if(numeroPaginaActual > 10){
+        numeroPaginaActual -= 10;
+        cantidadPokemonesMostrados -= (POKEMONES_POR_PAGINA * 10);
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#menos-cinco').addEventListener('click', () => {
+    if(numeroPaginaActual > 5){
+        numeroPaginaActual -= 5;
+        cantidadPokemonesMostrados -= (POKEMONES_POR_PAGINA * 5);
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#mas-cinco').addEventListener('click', () => {
+    if(numeroPaginaActual <= numeroUltimaPagina - 5){
+        numeroPaginaActual += 5;
+        cantidadPokemonesMostrados += (POKEMONES_POR_PAGINA * 5);
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#mas-diez').addEventListener('click', () => {
+    if(numeroPaginaActual <= numeroUltimaPagina - 10){
+        numeroPaginaActual += 10;
+        cantidadPokemonesMostrados += (POKEMONES_POR_PAGINA * 10);
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#pagina-siguiente').addEventListener('click', () => {
+    if(numeroPaginaActual < numeroUltimaPagina){
+        numeroPaginaActual++;
+        cantidadPokemonesMostrados += POKEMONES_POR_PAGINA;
+        manejarPaginacion();
+    }
+});
+
+document.querySelector('#ultima-pagina').addEventListener('click', () => {
+    if(numeroPaginaActual < numeroUltimaPagina){
+        numeroPaginaActual = numeroUltimaPagina;
+        cantidadPokemonesMostrados = numeroUltimaPagina * POKEMONES_POR_PAGINA - POKEMONES_POR_PAGINA;
+        manejarPaginacion();
+    }
+});
+
