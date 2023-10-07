@@ -39,3 +39,54 @@ function ocultarIconoCarga(){
     document.querySelector('.icono-carga-container').classList.add('visually-hidden');
 }
 
+
+/*****************************/
+/*      CARTAS POKEMON       */
+/*****************************/
+function retornarId(URL){
+    return Number(URL.split('/')[6]);
+}
+
+function crearCartasPokemones(respuestaApi){
+    for(let i = 0; i < respuestaApi.length; i++){
+        const idCarta = retornarId(respuestaApi[i].url);
+        const $cartaPokemon = document.createElement('div');
+        $cartaPokemon.classList.add('card-item');
+        $cartaPokemon.classList.add(`item-${idCarta}`);
+        $cartaPokemon.id = idCarta;
+
+        const $imagenPokemon = document.createElement('img');
+        $imagenPokemon.src = './img/pikachu_silueta.png';
+        $imagenPokemon.className = 'pokemon-desconocido';
+
+        $cartaPokemon.appendChild($imagenPokemon);
+        document.querySelector('.card-container').appendChild($cartaPokemon);
+    }
+}
+
+function nombrarPokemones(respuestaApi){
+    document.querySelectorAll('.card-item').forEach((cartaPokemon, i) => {
+        const $nombrePokemon = document.createElement('span');
+        $nombrePokemon.id = 'nombre-pokemon';
+        $nombrePokemon.textContent = respuestaApi[i].name;
+        cartaPokemon.appendChild($nombrePokemon);
+    });
+}
+
+function agregarImagenes(){
+    document.querySelectorAll('.card-item').forEach(cartaPokemon => {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${cartaPokemon.id}/`)
+            .then(respuesta => respuesta.json())
+            .then(respuesta => {
+                const $elementoImagen = document.querySelector(`.card-item.item-${cartaPokemon.id} img.pokemon-desconocido`);
+                const imagenPokemon = respuesta.sprites.other['official-artwork'].front_default;
+                if(imagenPokemon){
+                    $elementoImagen.src = imagenPokemon;
+                    $elementoImagen.className = 'pokemon-conocido';
+                }
+            })
+            .catch(error => console.error('FALLO', error));
+    });
+}
+
+
