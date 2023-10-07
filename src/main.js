@@ -150,3 +150,161 @@ document.querySelector('#boton-buscar-pokemon').addEventListener('click', () => 
 
 
 
+/****************************/
+//           MODAL          //
+/****************************/
+function desbloquearClickUsuario(){
+    document.querySelectorAll('.card-item').forEach(cartaActual => {
+        cartaActual.addEventListener('click', () => {
+            manejarModal(cartaActual);
+        });
+    });
+}
+
+function ocultarFondo(){
+    document.querySelector('.card-container').style.filter = 'blur(4px)';
+    document.querySelector('.card-container').style.pointerEvents = 'none';
+}
+
+function mostrarFondo(){
+    document.querySelector('.card-container').style.filter = '';
+    document.querySelector('.card-container').style.pointerEvents = '';
+}
+
+function eliminarModalAnterior(){
+    const $modalAnterior = document.querySelector('.modal-pokemon');
+    if($modalAnterior)$modalAnterior.remove();
+}
+
+function manejarModal(cartaActual){
+    eliminarModalAnterior();
+    ocultarFondo();
+    crearModal();
+    mostrarInformacionPokemon(cartaActual.id);
+    permitirCerrarModal();
+    permitirNavegarModales(Number(cartaActual.id));
+}
+
+function crearModal(){
+    const $modal = document.createElement('div');
+    $modal.className = "modal-pokemon";
+
+    const $botonCerrarModal = document.createElement('i');
+    $botonCerrarModal.className = 'bi bi-x';
+    $botonCerrarModal.id = 'cerrar-modal';
+    
+    const $botonPokemonAnterior = document.createElement('i');
+    $botonPokemonAnterior.className = 'bi bi-arrow-left';
+    $botonPokemonAnterior.id = 'anterior-pokemon';
+
+    const $botonPokemonSiguiente = document.createElement('i');
+    $botonPokemonSiguiente.className = 'bi bi-arrow-right';
+    $botonPokemonSiguiente.id = 'siguiente-pokemon';
+
+    const $contenedorImagen = document.createElement('div');
+    $contenedorImagen.className = "imagen-pokemon";
+
+    const $contenedorInformacion = document.createElement('div');
+    $contenedorInformacion.className = "informacion-pokemon";
+
+    $modal.appendChild($botonPokemonSiguiente);
+    $modal.appendChild($botonPokemonAnterior);
+    $modal.appendChild($botonCerrarModal);
+    $modal.appendChild($contenedorImagen);
+    $modal.appendChild($contenedorInformacion);
+    document.querySelector('.modal-container').appendChild($modal);
+}
+
+
+function mostrarInformacionPokemon(numeroPokemon){
+    fetch(`https://pokeapi.co/api/v2/pokemon/${numeroPokemon}/`)
+        .then(respuesta => respuesta.json())
+        .then(respuesta => {
+            mostrarImagenPokemon(respuesta);
+            mostrarCaracteristicasPokemon(respuesta, numeroPokemon);
+        })
+        .catch(error => {
+            console.error('EL POKEMON NO FUE ENCONTRADO: ', error);
+            eliminarModalAnterior();
+            mostrarError();
+            mostrarFondo();
+        });
+}
+
+function mostrarImagenPokemon(respuestaApi){
+    const $imagenModal = document.createElement('img');
+    $imagenModal.src = respuestaApi.sprites.other['official-artwork'].front_default || respuestaApi.sprites.front_default || './img/pikachu_silueta.png';
+    document.querySelector('.modal-pokemon .imagen-pokemon').appendChild($imagenModal);
+}
+
+function mostrarCaracteristicasPokemon(respuestaApi, numeroPokemon) {
+    const $caracteristicasPokemon = document.querySelector('.modal-pokemon .informacion-pokemon');
+    // NOMBRE DEL POKEMON
+    const $nombrePokemon = document.createElement('h5');
+    $nombrePokemon.textContent = `${numeroPokemon} | ${document.querySelector(`option[value="${numeroPokemon}"]`).textContent}`;
+
+    // HABILIDADES DEL POKEMON
+    const $habilidadesPokemon = document.createElement('span');
+    $habilidadesPokemon.textContent = "HABILIDADES: ";
+    respuestaApi.abilities.forEach(habilidad => {
+        $habilidadesPokemon.textContent += habilidad.ability.name + ' | ';
+    });
+
+    // TIPOS ELEMENTALES
+    const $tipoElementalPokemon = document.createElement('span');
+    $tipoElementalPokemon.textContent = "TIPO: ";
+    respuestaApi.types.forEach(tipoElemento => {
+        $tipoElementalPokemon.textContent += tipoElemento.type.name + ' | ';
+    });
+
+    // ALTURA POKEMON
+    const $alturaPokemon = document.createElement('span');
+    $alturaPokemon.textContent = "ALTURA: " +  respuestaApi.height;
+
+    // PESO POKEMON
+    const $pesoPokemon = document.createElement('span');
+    $pesoPokemon.textContent = "PESO: " + respuestaApi.weight;
+
+
+    $caracteristicasPokemon.appendChild($nombrePokemon);
+    $caracteristicasPokemon.appendChild($habilidadesPokemon);
+    $caracteristicasPokemon.appendChild($tipoElementalPokemon);
+    $caracteristicasPokemon.appendChild($alturaPokemon);
+    $caracteristicasPokemon.appendChild($pesoPokemon);
+}
+
+function permitirCerrarModal(){
+    document.querySelector('#cerrar-modal').addEventListener('click', () => {
+        mostrarFondo();
+        eliminarModalAnterior();
+    });
+}
+
+
+function permitirNavegarModales(numeroPokemonActual){
+    const cartasPokemon = document.querySelectorAll('.card-item');
+    const numeroPrimerPokemon = Number(cartasPokemon[0].id);
+    const numeroUltimoPokemon = Number(cartasPokemon[cartasPokemon.length - 1].id);
+    const indiceActual = retornarIndiceActual(cartasPokemon, numeroPokemonActual);
+
+    document.querySelector('#anterior-pokemon').addEventListener('click', () => {
+        if(numeroPokemonActual > numeroPrimerPokemon)manejarModal(cartasPokemon[indiceActual - 1]);
+    });
+
+    document.querySelector('#siguiente-pokemon').addEventListener('click', () => {
+        if(numeroPokemonActual < numeroUltimoPokemon)manejarModal(cartasPokemon[indiceActual + 1]);
+    });
+}
+
+function retornarIndiceActual(cartasPokemon, numeroPokemonActual){
+    let indiceActual;
+
+    cartasPokemon.forEach((cartaPokemon, i) => {
+        if(Number(cartaPokemon.id) === numeroPokemonActual)indiceActual = i;
+    });
+
+    return indiceActual;
+}
+
+
+
