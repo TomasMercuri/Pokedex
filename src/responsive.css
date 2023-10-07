@@ -1,0 +1,74 @@
+@media (max-width: 1200px) {
+    h1 {
+        font-size: 35px;
+    }
+
+    .modal-container .modal-pokemon{
+        max-width: 500px;
+    }
+
+    .modal-container .modal-pokemon .imagen-pokemon {
+        width: 80%;
+    }
+
+
+    header .buscador-pokemones {
+        right: 30px;
+    }
+    
+    header .buscador-pokemones button {
+        font-size: 16px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    header .buscador-pokemones input {
+        padding: 6px 8px !important;
+        width: 120px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 30px;
+        padding: 5px 0 !important;
+    }
+
+    header {
+        flex-direction: column;
+    }
+
+    header .buscador-pokemones {
+        position: relative;
+        right: 0px;
+    }
+
+    header .buscador-pokemones input {
+        padding: 6px 8px !important;
+        width: 200px;
+    }
+
+    .card-container .card-item {
+        width: 170px;
+        height: 170px;
+    }
+
+    .card-container .card-item span#nombre-pokemon {
+        font-size: 14px;
+    }
+
+    section .pagination li a {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+    .modal-container .modal-pokemon{
+        width: 90%;
+    }
+
+    .modal-container .modal-pokemon .imagen-pokemon{
+        width: 95%;
+    }
+
+}
