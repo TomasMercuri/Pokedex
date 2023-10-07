@@ -4,14 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="./src/style.css">
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="./src/style.css">
+    <link rel="stylesheet" href="./src/responsive.css">
 </head>
 <body>
+    <div class="container-fluid">
+        <header class="d-flex justify-content-center align-items-center py-4">
+            <div class="titulo">
+                <h1>POKÉDEX</h1>
+            </div>
+            <div class="buscador-pokemones">
+                <input type="text" id="buscador-pokemon" list="opciones-pokemones">
+
+                <datalist id="opciones-pokemones">
+                </datalist>
+
+                <button type="button" id="boton-buscar-pokemon">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </header>
 
 
+    </div>
 
     <script src="./src/main.js"></script>
 </body>
