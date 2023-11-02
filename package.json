@@ -4,7 +4,9 @@
   "description": "Proyecto de pokedex hecho con pokeAPI",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress-run": "cypress run",
+    "cypress-dev": "cypress open"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +15,7 @@
     "bootstrap-icons": "^1.11.1"
   },
   "devDependencies": {
-    "cypress": "^13.1.0"
+    "@types/cypress": "^1.1.3",
+    "cypress": "^13.3.1"
   }
 }
